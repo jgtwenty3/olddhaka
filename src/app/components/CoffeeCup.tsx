@@ -16,8 +16,7 @@ export default function CoffeeCup({ textureURL, onClick }) {
   const { nodes } = useGLTF('/coffeeCup.gltf') as GLTFResult;
 
   const coffeeCupTexture = useTexture(textureURL);
-  coffeeCupTexture.flipY = false;
-  coffeeCupTexture.colorSpace = THREE.SRGBColorSpace;
+  
 
   const coffeeCupMaterial = useMemo(
     () => new THREE.MeshStandardMaterial({ map: coffeeCupTexture, roughness: 0.5 }),
@@ -38,8 +37,10 @@ export default function CoffeeCup({ textureURL, onClick }) {
     return null;
   }
 
+  const scale = window.innerWidth < 768 ? [0.5, 0.5, 0.5] : [0.3, 0.3, 0.3]; // Larger scale for small devices
+
   return (
-    <group onClick={onClick} ref={cupRef} scale={[0.3, 0.3, 0.3]} rotation={[-Math.PI / 2, 0, 0]}>
+    <group onClick={onClick} ref={cupRef} scale={scale} rotation={[-Math.PI / 2, 0, 0]}>
       <mesh
         name='CupCoffee_CupCoffee1_0'
         geometry={nodes.CupCoffee_CupCoffee1_0.geometry}

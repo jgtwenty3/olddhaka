@@ -14,7 +14,7 @@ type Props = {
 
 export function InteractiveCoffeeCup({ textureURL }: Props) {
   return (
-    <div className='absolute inset-0 z-10 flex items-center justify-center'>
+    <div className='absolute inset-0 z-10 flex items-center justify-center mt-80 ml-8 md:ml-96 md:mb-20'>
       <Canvas className='min-h-[60rem] w-full' 
         camera={{ position: INITIAL_CAMERA_POSITION, fov: 55 }}>
         <Suspense fallback={null}>
@@ -24,21 +24,20 @@ export function InteractiveCoffeeCup({ textureURL }: Props) {
     </div>
   );
 }
+
 function Scene({ textureURL }: Props) {
   const containerRef = useRef<THREE.Group>(null);
-  const [animating, setAnimating] = useState(false);
-
   const { camera } = useThree();
 
   useEffect(() => {
     if (!containerRef.current) return;
+    
 
-    gsap.to(containerRef.current.position, {
-      x: 0.2,
-      duration: 3,
+    gsap.to(containerRef.current.rotation, {
+      y: `+=${2 * Math.PI}`, // 360 degrees
+      duration: 10,
       repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
+      ease: 'linear',
     });
   }, []);
 
@@ -57,15 +56,13 @@ function Scene({ textureURL }: Props) {
     return () => window.removeEventListener('resize', setZoom);
   }, [camera]);
 
-  
-
   return (
     <group>
       <Environment files='/hdr/warehouse-256.hdr' />
       <group ref={containerRef}>
         <CoffeeCup onClick={""} textureURL={textureURL} />
       </group>
-      <ContactShadows opacity={0.6} position={[0, -0.08, 0]} />
+        <ContactShadows opacity={0.6} position={[0, -0.08, 0]} />
       <group
         rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
         position={[0, -0.09, -0.5]}

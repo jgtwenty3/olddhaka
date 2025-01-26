@@ -13,6 +13,11 @@ export default {
       defaultScreens: ["20rem", theme("screens.lg")],
     })) satisfies FluidThemeConfig,
     extend: {
+      fontFamily: {
+        
+        itcbenguiat: ['"ITCBenguiatStdBoldCn"', 'sans-serif'], 
+
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

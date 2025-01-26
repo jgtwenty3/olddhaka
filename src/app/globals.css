@@ -2,7 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'ITCBenguiatStdBoldCn';
+  src: url('/fonts/ITCBenguiatStdBoldCn.OTF') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
+  --font-itcbenguiat: 'ITCBenguiatStdBoldCn', Arial, sans-serif;
   --background: #ffffff;
   --foreground: #032C1F;
 }
@@ -17,5 +25,5 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-itcbenguiat); 
 }
