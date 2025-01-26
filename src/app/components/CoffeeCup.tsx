@@ -11,12 +11,19 @@ type GLTFResult = GLTF & {
   materials: {};
 };
 
-export default function CoffeeCup({ textureURL, onClick }) {
+interface CoffeeCupProps {
+  textureURL: string;
+  onClick: (event: React.MouseEvent<THREE.Group>) => void;
+}
+
+export default function CoffeeCup({
+  textureURL, 
+  onClick
+}: CoffeeCupProps) {
   const cupRef = useRef<THREE.Object3D>(null);
   const { nodes } = useGLTF('/coffeeCup.gltf') as GLTFResult;
 
-  const coffeeCupTexture = useTexture(textureURL);
-  
+  const coffeeCupTexture = useTexture(textureURL) as THREE.Texture;
 
   const coffeeCupMaterial = useMemo(
     () => new THREE.MeshStandardMaterial({ map: coffeeCupTexture, roughness: 0.5 }),
@@ -37,7 +44,11 @@ export default function CoffeeCup({ textureURL, onClick }) {
     return null;
   }
 
-  const scale = window.innerWidth < 768 ? [0.5, 0.5, 0.5] : [0.3, 0.3, 0.3]; // Larger scale for small devices
+  const scale = new THREE.Vector3(
+    window.innerWidth < 768 ? 0.5 : 0.3, 
+    window.innerWidth < 768 ? 0.5 : 0.3, 
+    window.innerWidth < 768 ? 0.5 : 0.3 
+  );
 
   return (
     <group onClick={onClick} ref={cupRef} scale={scale} rotation={[-Math.PI / 2, 0, 0]}>

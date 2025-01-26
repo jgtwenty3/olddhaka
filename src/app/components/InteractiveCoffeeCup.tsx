@@ -35,7 +35,7 @@ function Scene({ textureURL }: Props) {
 
     gsap.to(containerRef.current.rotation, {
       y: `+=${2 * Math.PI}`, // 360 degrees
-      duration: 10,
+      duration: 5,
       repeat: -1,
       ease: 'linear',
     });

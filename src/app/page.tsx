@@ -6,7 +6,7 @@ export default function Home() {
     <div>
       <Header />
       <div className="flex justify-center items-center h-screen">
-        <div className="bg-white md:w-5/6 md:h-4/5 w-4/5 h-2/3 flex justify-start md:justify-center items-center rounded-sm">
+        <div className="bg-white md:w-5/6 md:h-4/5 w-4/5 h-2/3 flex justify-start md:justify-center items-center rounded-sm shadow-xl shadow-black">
           <div className="flex w-full h-full">
             <div className="w-1/2 flex flex-col p-10 md:p-12">
               <h2 className="text-2xl md:text-8xl mb-5 font-itcbenguiat">OLD DHAKA</h2>
@@ -20,7 +20,7 @@ export default function Home() {
             </div>
             
             <div className="w-1/2 flex justify-end items-end">
-              <InteractiveCoffeeCup textureURL='/textures/cupTexture.png' />
+              <InteractiveCoffeeCup textureURL='/textures/texture4.png' />
             </div>
           </div>
         </div>
