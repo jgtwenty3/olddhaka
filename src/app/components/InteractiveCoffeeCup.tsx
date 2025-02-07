@@ -1,10 +1,13 @@
 "use client";
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useRef } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
-import { Environment, Html, ContactShadows } from '@react-three/drei';
+import { Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
 import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 import CoffeeCup from './CoffeeCup'; 
+
+gsap.registerPlugin(useGSAP);
 
 const INITIAL_CAMERA_POSITION = [1.5, 1, 1.4] as const;
 
@@ -29,19 +32,18 @@ function Scene({ textureURL }: Props) {
   const containerRef = useRef<THREE.Group>(null);
   const { camera } = useThree();
 
-  useEffect(() => {
+  useGSAP(() => {
     if (!containerRef.current) return;
-    
 
     gsap.to(containerRef.current.rotation, {
       y: `+=${2 * Math.PI}`, // 360 degrees
-      duration: 5,
-      repeat: -1,
+      duration: 2,
+      repeat: 0, // Continue rotating until scrolling starts
       ease: 'linear',
     });
-  }, []);
+  }, { scope: containerRef });
 
-  useEffect(() => {
+  useGSAP(() => {
     camera.lookAt(new THREE.Vector3(-0.2, 0.15, 0));
     setZoom();
     window.addEventListener('resize', setZoom);
@@ -56,21 +58,39 @@ function Scene({ textureURL }: Props) {
     return () => window.removeEventListener('resize', setZoom);
   }, [camera]);
 
+  useGSAP(() => {
+    const handleScroll = () => {
+      if (!containerRef.current) return;
+      const rotationAngle = Math.min(window.scrollY * 0.01, Math.PI / 2); // Limit the rotation to 90 degrees
+
+      gsap.to(containerRef.current.rotation, {
+        x: rotationAngle, // Rotate on the x-axis
+        duration: 1,
+        ease: 'power2.out',
+        onComplete: () => {
+          if (rotationAngle >= Math.PI / 2) {
+            gsap.killTweensOf(containerRef.current.rotation); // Stop the rotation animation
+          }
+        }
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [containerRef]);
+
   return (
     <group>
-      <Environment files='/hdr/warehouse-256.hdr' />
+      <Environment files='/hdr/warehouse-256.hdr' environmentIntensity={.6} />
       <group ref={containerRef}>
-        <CoffeeCup onClick={""} textureURL={textureURL} />
+        <CoffeeCup textureURL={textureURL} />
       </group>
-        <ContactShadows opacity={0.6} position={[0, -0.08, 0]} />
+      <ContactShadows opacity={0.6} position={[0, -0.08, 0]} />
       <group
         rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
         position={[0, -0.09, -0.5]}
         scale={[0.2, 0.2, 0.2]}
       >
-        <Html wrapperClass='pointer-events-none' transform zIndexRange={[1, 0]} occlude='blending'>
-          {/* Add any additional UI elements or components */}
-        </Html>
       </group>
     </group>
   );

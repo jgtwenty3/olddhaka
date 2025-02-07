@@ -13,7 +13,7 @@ type GLTFResult = GLTF & {
 
 interface CoffeeCupProps {
   textureURL: string;
-  onClick: (event: React.MouseEvent<THREE.Group>) => void;
+  onClick?: (event: React.MouseEvent<THREE.Group>) => void;
 }
 
 export default function CoffeeCup({
@@ -29,6 +29,7 @@ export default function CoffeeCup({
     () => new THREE.MeshStandardMaterial({ map: coffeeCupTexture, roughness: 0.5 }),
     [coffeeCupTexture]
   );
+  
 
   const whiteMaterial = useMemo(
     () => new THREE.MeshStandardMaterial({ color: 'white', roughness: 0.5 }),
@@ -51,7 +52,7 @@ export default function CoffeeCup({
   );
 
   return (
-    <group onClick={onClick} ref={cupRef} scale={scale} rotation={[-Math.PI / 2, 0, 0]}>
+    <group onClick={onClick} ref={cupRef} scale={scale} rotation={[-Math.PI/2, 0, 2]}>
       <mesh
         name='CupCoffee_CupCoffee1_0'
         geometry={nodes.CupCoffee_CupCoffee1_0.geometry}
